@@ -1,7 +1,5 @@
 import React from 'react';
-import { useState } from "react";
-import router, { useRouter } from "next/router";
-import { trpc } from "../utils/trpc";
+import router from "next/router";
 
 const Header = () => {
   return (

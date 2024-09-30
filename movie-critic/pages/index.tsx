@@ -77,4 +77,7 @@ export default function HomePage() {
 
 function handleDeleteMovie(id: number) {
   // Implement movie delete logic, ensure associated reviews are deleted
+  if(id){
+    trpc.movie.deleteMovie.useMutation().mutate(id);
+  }
 }
