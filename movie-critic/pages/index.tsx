@@ -14,8 +14,8 @@ interface Movie {
     <Link href={`/movies/${movie.id}`}>
       <div className="bg-white shadow-md rounded-lg p-4 hover:bg-gray-100 cursor-pointer">
         <h2 className="text-xl font-semibold">{movie.name}</h2>
-        <p className="text-gray-600">Released on: {movie.releaseDate}</p>
-        <p className="text-yellow-500">Rating: {movie.averageRating || 'No reviews yet'}</p>
+        <p className="text-gray-600">Released on: {movie.releaseDate.slice(0,10)}</p>
+        <p className="text-yellow-500">Rating: {movie.averageRating?.toPrecision(3)|| 'No reviews yet'}</p>
       </div>
     </Link>
   );
@@ -29,6 +29,19 @@ export default function HomePage() {
   const filteredMovies = movies?.filter((movie) =>
     movie.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+  const utils = trpc.useContext();
+  const deleteMovieMutation = trpc.movie.deleteMovie.useMutation({
+      onSuccess: () => {
+        // Invalidate movie list to refetch
+        utils.invalidate();
+      },
+    });
+      // Handle delete
+      const handleDeleteMovie = (movieId: number) => {
+        if (confirm('Are you sure you want to delete this movie?')) {
+          deleteMovieMutation.mutate(movieId);
+        }
+      };
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
@@ -57,7 +70,7 @@ export default function HomePage() {
             <div className="flex justify-end mt-4">
               <button
                 className="bg-yellow-400 text-white px-2 py-1 rounded-md mr-2"
-                onClick={() => router.push(`/edit-movie/${movie.id}`)}
+                onClick={() => router.push(`/edit-movie?id=${movie.id}`)}
               >
                 ✏️
               </button>
@@ -73,11 +86,7 @@ export default function HomePage() {
       </div>
     </div>
   );
+
+  
 }
 
-function handleDeleteMovie(id: number) {
-  // Implement movie delete logic, ensure associated reviews are deleted
-  if(id){
-    trpc.movie.deleteMovie.useMutation().mutate(id);
-  }
-}
