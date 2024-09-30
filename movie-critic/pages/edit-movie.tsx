@@ -7,7 +7,7 @@ export default function EditMoviePage() {
   const router = useRouter();
 
   const {id}=router.query;
-  const { data: movie, isLoading } = trpc.movie.getMovieById.useQuery({id:Number(id)});
+  const { data: movie } = trpc.movie.getMovieById.useQuery({id:Number(id)});
   const [name, setName] = useState(movie?.name);
   const [releaseDate, setReleaseDate] = useState(movie?.releaseDate);
  
