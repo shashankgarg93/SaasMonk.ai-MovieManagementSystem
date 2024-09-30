@@ -8,7 +8,7 @@ export default function AddReviewPage() {
   const [movieId, setMovieId] = useState("");
   const [reviewerName, setReviewerName] = useState("");
   const [rating, setRating] = useState(0);
-  const [comments, setComments] = useState("");
+  const [reviewText, setReviewText] = useState("");
 
   const createReview = trpc.review.addReview.useMutation({
     onSuccess: () => {
@@ -22,7 +22,7 @@ export default function AddReviewPage() {
         movieId: Number(movieId),
         reviewerName,
         rating: Number(rating),
-        reviewText: ""
+        reviewText: reviewText
       });
     }
   };
@@ -60,8 +60,8 @@ export default function AddReviewPage() {
         <textarea
           placeholder="Review comments"
           className="w-full p-2 border rounded-md mb-4"
-          value={comments}
-          onChange={(e) => setComments(e.target.value)}
+          value={reviewText}
+          onChange={(e) => setReviewText(e.target.value)}
         />
         <button
           className="bg-purple-500 text-white px-4 py-2 rounded-md w-full"
